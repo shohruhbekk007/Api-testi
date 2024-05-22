@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 
@@ -20,4 +20,12 @@ def ApiPage(request):
 
 
 def ContactPage(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        if len(message) !=0:
+            pass
+        return redirect('contact')
     return render(request, 'contact.html')
