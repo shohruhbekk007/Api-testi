@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-
+from .models import Contact
 
 
 def IndexPage(request):
@@ -20,12 +20,15 @@ def ApiPage(request):
 
 
 def ContactPage(request):
+    a = Contact()
     if request.method == "POST":
         name = request.POST.get('name')
-        phone = request.POST.get('phone')
+        phone = request.POST.get('phoneNumber')
         email = request.POST.get('email')
         message = request.POST.get('message')
         if len(message) !=0:
-            pass
-        return redirect('contact')
+            Contact.objects.create(name=name, phone_number=phone, email=email, message=message)
+            return redirect('index')
+        else:
+            return redirect('index')
     return render(request, 'contact.html')
