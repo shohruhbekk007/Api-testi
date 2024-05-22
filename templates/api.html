@@ -1,35 +1,154 @@
-{% extends 'base.html' %}
-{% block content %}
-salom
-{% endblock %}      <!-- contact -->
-<div class="contact">
-   <div class="container">
-      <div class="row ">
-         <div class="col-md-8 offset-md-2">
-            <div class="titlepage text_align_left">
-               <h2>Get In Touch</h2>
-            </div>
-            <form id="request" class="main_form">
-               <div class="row">
-                  <div class="col-md-12">
-                     <input class="contactus" placeholder="Name" type="type" name=" Name"> 
-                  </div>
-                  <div class="col-md-12">
-                     <input class="contactus" placeholder="Phone Number" type="type" name="Phone Number">                          
-                  </div>
-                  <div class="col-md-12">
-                     <input class="contactus" placeholder="Email" type="type" name="Email">                          
-                  </div>
-                  <div class="col-md-12">
-                     <textarea class="textarea" placeholder="Message" type="type" Message="Name"></textarea>
-                  </div>
-                  <div class="col-md-12">
-                     <button class="send_btn">Send Now</button>
-                  </div>
-               </div>
-            </form>
-         </div>
-      </div>
-   </div>
-</div>
-<!-- contact -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple API Tester</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #352323;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 800px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      position: relative;
+    }
+
+    .simple {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #428bca;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #3071a9;
+    }
+
+    #response {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #eee;
+      white-space: pre-wrap;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('background_image.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.2;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="simple">Simple API Tester</h1>
+    <form id="api-form">
+      <label for="url">URL:</label>
+      <input type="text" id="url" name="url" placeholder="Enter API endpoint URL">
+      <label for="method">Method:</label>
+      <select id="method" name="method">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option>
+      </select>
+      <label for="body">Request Body (optional):</label>
+      <textarea id="body" name="body" rows="5" placeholder="Enter JSON data for POST/PUT requests"></textarea>
+      <button type="submit" id="submit-button">Send Request</button>
+    </form>
+    <div id="response"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('api-form');
+    const responseDiv = document.getElementById('response');
+    const button = document.getElementById('submit-button');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Save the original button color
+      const originalButtonColor = button.style.backgroundColor;
+
+      // Change button color to indicate request is being sent
+      button.style.backgroundColor = '#ccc';
+
+      const url = document.getElementById('url').value;
+      const method = document.getElementById('method').value;
+      const body = document.getElementById('body').value;
+
+      const request = {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      if (body) {
+        request.body = JSON.stringify(JSON.parse(body));
+      }
+
+      fetch(url, request)
+        .then(response => response.json())
+        .then(data => {
+          responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        })
+        .catch(error => {
+          responseDiv.textContent = `Error: ${error.message}`;
+        })
+        .finally(() => {
+          // Revert button color to original color after request completes
+          button.style.backgroundColor = originalButtonColor;
+        });
+    });
+  </script>
+</body>
+</html>
+ 
